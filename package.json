@@ -1,0 +1,19 @@
+{
+  "name": "simple-fake-metadata-api",
+  "version": "1.0.0",
+  "description": "A very simple web API endpoint that returns a 200 from the endpoint that the EC2 metadata service on Amazon EC2 instances usually serves spot termination times on.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "shoganator",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shogan/ec2-spot-termination-simulator.git"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
