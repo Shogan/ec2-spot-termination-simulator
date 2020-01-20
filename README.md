@@ -4,13 +4,16 @@ A very simple web API endpoint that returns a 200 from the endpoint that the EC2
 
 You can use this to simulate a working EC2 metadata spot termination endpoint response.
 
-When a spot instance is not scheduled for termination, this endpoint (http://169.254.169.254/latest/meta-data/spot/termination-time), usually responds with an HTTP 404 not found.
+When a spot instance is scheduled for termination one of two different endpoints could provide warning:
 
-However, if a spot instance is scheduled for termination, this endpoint responds with an HTTP 200 and the timestamp of when the termination will occur.
+* http://169.254.169.254/latest/meta-data/spot/termination-time - responds with a 200 OK response and an ISO 8601 timestamp of when the shutdown signal will be sent to the guest OS.
+* http://169.254.169.254/latest/meta-data/spot/instance-action - responds with a 200 OK response and a JSON string that contains the action that will happen as well as the ISO 8601 timestamp of when that action will happen.
 
-Some spot instance interruption handlers such as https://github.com/kube-aws/kube-spot-termination-notice-handler poll this metadata URL endpoint looking for a non 404 response. Once found, they'll drain the node and cordon it off in preparation for the instance to be terminated in the next 2 minutes.
+If however, no action or no termination is scheduled then these endpoints will simply return a 404 not found response.
 
-This simple web app will fake the response to become a 200 on http://169.254.169.254/latest/meta-data/spot/termination-time and so the interrupt handler will take action immediately.
+Some spot instance interruption handlers such as https://github.com/kube-aws/kube-spot-termination-notice-handler poll this metadata URL endpoint looking for a 200 OK response. Once found, they'll drain the node and cordon it off in preparation for the instance to be terminated in the next 2 minutes.
+
+This simple web app will fake the response to become a 200 OK on http://169.254.169.254/latest/meta-data/spot/termination-time and the http://169.254.169.254/latest/meta-data/spot/instance-action endpoint, including the relevant response body, and so the interrupt handler will take action immediately.
 
 There is a trick to get this accessible on a node though.
 
