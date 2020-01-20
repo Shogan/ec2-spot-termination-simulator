@@ -52,6 +52,22 @@ Should return a 200 OK response with a message from the web app / service.
 
 kube-spot-termination-notice-handler should now pick this up immediately and drain/cordon the node. (However it won't actually be terminated as this was of course just a simulated termination).
 
+## Running in Docker
+
+The env variable `PORT` will modify the internal container listening port for NodeJS.
+
+```
+docker run -p 30626:80 -e PORT=80 shoganator/ec2-spot-termination-simulator
+```
+
+## Running in Kubernetes
+
+There are no fancy helm charts for this tool. Just simply apply the deployment + NodePort service manifest as below (Modify it to your liking first if you wish):
+
+```
+kubectl -n yournamespace apply -f https://raw.githubusercontent.com/Shogan/ec2-spot-termination-simulator/master/simple-k8s-deployment.yaml
+```
+
 ## Notes
 
 I tried various iptable rules to forward traffic from 169.254.169.254 to the NodePort and web service, however could not get iptables to work without the traffic going down a blackhole. In the end the combination of ifconfig and socat worked well.
