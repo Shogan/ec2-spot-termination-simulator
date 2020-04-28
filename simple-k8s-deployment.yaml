@@ -22,7 +22,7 @@ spec:
         app: ec2-spot-termination-simulator
     spec:
       containers:
-      - image: shoganator/ec2-spot-termination-simulator:1.0.0
+      - image: shoganator/ec2-spot-termination-simulator:1.0.1
         imagePullPolicy: Always
         name: spot-term-simulator
         env:
